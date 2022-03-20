@@ -5,6 +5,7 @@ import { quote } from "#plugins/tools/quote";
 import { roll } from "#plugins/tools/roll";
 import { checkAuth } from "#utils/auth";
 import { hasEntrance } from "#utils/config";
+import { hoyo } from "#plugins/tools/hoyo";
 
 async function Plugin(msg) {
   switch (true) {
@@ -31,6 +32,11 @@ async function Plugin(msg) {
     case hasEntrance(msg.text, "tools", "feedback"):
       if (false !== checkAuth(msg, "feedback")) {
         feedback(msg);
+      }
+      break;
+    case hasEntrance(msg.text, "tools", "hoyo"):
+      if (false !== checkAuth(msg, "hoyo")) {
+        hoyo(msg);
       }
       break;
     case hasEntrance(msg.text, "tools", "help"):

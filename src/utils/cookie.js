@@ -30,7 +30,7 @@ function getCookieItem(cookie, item = "account_id") {
 function isValidCookie(cookie) {
   return !!("string" === typeof cookie && getCookieItem(cookie, "cookie_token") && getCookieItem(cookie, "account_id"));
 }
-
+export { isValidCookie }
 function getCookieByID(uid) {
   const dbName = "map";
 

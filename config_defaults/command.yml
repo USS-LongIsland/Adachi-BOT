@@ -228,7 +228,7 @@ tools:
   enable: true
   weights: 99
   regex:
-    - ^(help|roll|菜单|管理(命令|功能)|伟大的升华|求签|占卜)\s*$
+    - ^(help|roll|菜单|管理(命令|功能)|伟大的升华|求签|占卜|绑定ck)\s*$
     - ^(今天)?[吃喝]什么\s*$
     - ^roll\s*[+-]?\d+\s*$
     - ^带(个)?话\s*.+$
@@ -304,6 +304,17 @@ tools:
       description: 查看本帮助
       entrance:
         - ^help
+    HoYo:
+      type: command
+      show: true
+      weights: 99
+      name: 签到
+      usage: null
+      revert: false
+      description: 查看米游社签到功能
+      entrance:
+        - ^绑定ck
+        #- 
 
 material:
   enable: true
