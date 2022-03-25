@@ -81,7 +81,7 @@ async function doPost() {
   if (false === mPostRunning) {
     mPostRunning = true;
     await renderClose();
-    await lastWords();
+    //await lastWords();
     syncDBJob();
     await new Promise((resolve) => setTimeout(resolve, 3000));
     mPostRunning = false;
