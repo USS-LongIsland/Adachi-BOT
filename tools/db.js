@@ -12,8 +12,8 @@ const mDatabaseNames = ls(path.resolve(global.rootdir, "data", "db"))
     return p.name;
   });
 
-async function main() {
-  const argv = yargs(hideBin(process.argv))
+(async function main() {
+  const { argv } = yargs(hideBin(process.argv))
     .usage("-d <string> -k <string> [-p <string> --pk <string> --pv <string> --numeric")
     .example("-d gacha -k user")
     .example("-d gacha -k data --pk gacha_type --pv 200 --numeric")
@@ -71,7 +71,7 @@ async function main() {
         requiresArg: false,
         required: false,
       },
-    }).argv;
+    });
 
   if ("string" === typeof argv.key) {
     if (!mDatabaseNames.includes(argv.database)) {
@@ -107,6 +107,7 @@ async function main() {
   }
 
   return 0;
-}
-
-main().then((n) => process.exit(n));
+})()
+  .then((n) => process.exit("number" === typeof n ? n : 0))
+  .catch((e) => console.log(e))
+  .finally(() => process.exit(-1));

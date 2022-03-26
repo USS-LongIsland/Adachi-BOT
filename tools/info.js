@@ -2,15 +2,11 @@ import fs from "fs";
 import lodash from "lodash";
 import path from "path";
 import puppeteer from "puppeteer";
-import _url from "url";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import "#utils/config";
 import { mkdir } from "#utils/file";
 
-const __filename = _url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const mRootdir = path.resolve(__dirname, "..");
 const mHoneyUrl = "https://genshin.honeyhunterworld.com";
 const mBwikiUrl = "https://wiki.biligame.com/ys";
 const mTypes = {
@@ -171,8 +167,9 @@ async function getMaterialTime(name) {
   return time;
 }
 
-// { type, title, id , name, introduce, birthday, element, cv, constellationName, rarity, mainStat, mainValue, baseATK,
-//  passiveTitle, passiveDesc, ascensionMaterials, levelUpMaterials, talentMaterials, time, constellations }
+// { type, ascensionMaterials, baseATK, birthday, constellationName, constellations, cv, cvCN, cvJP, element,
+//   id, introduce, levelUpMaterials, mainStat, mainValue, name, passiveDesc, passiveTitle, rarity, talentMaterials,
+//   time, title }
 async function getCharData(name, page) {
   const type = "角色";
   let handle;
@@ -369,30 +366,32 @@ async function getCharData(name, page) {
 
   return {
     type,
-    title,
-    id,
-    name,
-    introduce,
+    ascensionMaterials,
+    baseATK,
     birthday,
-    element,
-    cv,
     constellationName,
-    rarity,
+    constellations,
+    cv,
+    cvCN,
+    cvJP,
+    element,
+    id,
+    introduce,
+    levelUpMaterials,
     mainStat,
     mainValue,
-    baseATK,
-    passiveTitle,
+    name,
     passiveDesc,
-    ascensionMaterials,
-    levelUpMaterials,
+    passiveTitle,
+    rarity,
     talentMaterials,
     time,
-    constellations,
+    title,
   };
 }
 
-// { type, title, name, introduce, access, rarity, mainStat, mainValue, baseATK, ascensionMaterials, time, skillName,
-//   skillContent }
+// { access, ascensionMaterials, baseATK, introduce, mainStat, mainValue, name, rarity, skillContent, skillName, time,
+//   title, type }
 async function getWeaponData(name, page) {
   const type = "武器";
   let handle;
@@ -403,8 +402,8 @@ async function getWeaponData(name, page) {
   }
 
   handle = (
-    await page.$x("//div[contains(@class, 'data_cont_wrapper')]/table[contains(@class, 'item_main_table')]")
-  )[1];
+    await page.$x("//div[contains(@class, 'data_cont_wrapper')][2]/table[contains(@class, 'item_main_table')]")
+  )[0];
   const title =
     mTypes.weapon[
       (await page.evaluate((e) => e.textContent, (await handle.$x("./tbody/tr[1]/td[3]/a"))[0])).toLowerCase()
@@ -464,9 +463,9 @@ async function getWeaponData(name, page) {
 
   handle = (
     await page.$x(
-      "//div[contains(@class, 'wrappercont')]/div[contains(@class, 'data_cont_wrapper')]/table[contains(@class, 'add_stat_table')]"
+      "//div[contains(@class, 'wrappercont')]/div[contains(@class, 'data_cont_wrapper')][2]/table[contains(@class, 'add_stat_table')]"
     )
-  )[2];
+  )[0];
   const maxLvTr = parseInt(rarity) > 2 ? 26 : 20;
   let mainValue = await page.evaluate((e) => e.textContent, (await handle.$x(`./tbody/tr[${maxLvTr}]/td[3]`))[0]);
   const baseATK = parseInt(
@@ -503,19 +502,19 @@ async function getWeaponData(name, page) {
   const time = await getMaterialTime(ascensionMaterials[0][0]);
 
   return {
-    type,
-    title,
-    name,
-    introduce,
     access,
-    rarity,
+    ascensionMaterials,
+    baseATK,
+    introduce,
     mainStat,
     mainValue,
-    baseATK,
-    ascensionMaterials,
-    time,
-    skillName,
+    name,
+    rarity,
     skillContent,
+    skillName,
+    time,
+    title,
+    type,
   };
 }
 
@@ -552,7 +551,7 @@ async function getData(name, link, type = "weapon") {
 }
 
 function writeData(name, data = {}, file = undefined) {
-  const defaultDir = mkdir(path.resolve(mRootdir, "resources_custom", "Version2", "info", "docs"));
+  const defaultDir = mkdir(path.resolve(global.rootdir, "resources_custom", "Version2", "info", "docs"));
   let old = {};
 
   if ("string" !== typeof file) {
@@ -570,12 +569,12 @@ function writeData(name, data = {}, file = undefined) {
   }
 
   process.stdout.write(`正在写入文件“${file}” ……`);
-  fs.writeFileSync(file, JSON.stringify(Object.assign(data, old), null, 2));
+  fs.writeFileSync(file, JSON.stringify(Object.assign(data, old || "祈愿"), null, 2));
   console.log("\t成功");
 }
 
-async function main() {
-  const argv = yargs(hideBin(process.argv))
+(async function main() {
+  const { argv } = yargs(hideBin(process.argv))
     .usage("-n <string>")
     .example("-n 刻晴")
     .example("-n 天空之刃")
@@ -597,7 +596,7 @@ async function main() {
         requiresArg: true,
         required: false,
       },
-    }).argv;
+    });
 
   if ("string" === typeof argv.name && "" !== argv.name) {
     try {
@@ -624,6 +623,7 @@ async function main() {
 
     console.log(`没有找到名为“${argv.name}”的角色或武器。`);
   }
-}
-
-main().then((n) => process.exit(n));
+})()
+  .then((n) => process.exit("number" === typeof n ? n : 0))
+  .catch((e) => console.log(e))
+  .finally(() => process.exit(-1));
