@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import fetch from "node-fetch";
-import { artifactProps } from "#plugins/artifacts/data";
 import { imageOcr } from "#plugins/rating/data";
+import { findIndexOf } from "#plugins/rating/findIndexOf";
 
 async function doImageOcr(msg) {
   const source = msg.text.match(/\[CQ:image,type=.*?,file=.+?]/);
@@ -60,14 +60,6 @@ async function doRating(msg) {
 
 // 本地计算词条数并发送
 async function doRating2(msg) {
-  function indexOf(type) {
-    for (let i = 0; i < global.artifacts.values[0].length; ++i) {
-      if (type === artifactProps[i].type) {
-        return i;
-      }
-    }
-  }
-
   const prop = await doImageOcr(msg);
   let report;
 
@@ -78,7 +70,7 @@ async function doRating2(msg) {
   report = `您的${prop.pos || "圣遗物"}（${prop.main_item.name}）词条数为：`;
 
   const effectTypes = lodash
-    .chain(artifactProps)
+    .chain(global.artifacts.props)
     .filter((c) => !["hp", "df"].includes(c.type))
     .map((c) => c.type)
     .uniq()
@@ -90,19 +82,18 @@ async function doRating2(msg) {
   let cdcr = 0;
 
   for (const c of prop.sub_item) {
-    const numeric = !c.value.includes("%");
-    let index = indexOf(c.type);
+    const [index, percentage, numeric] = findIndexOf(c);
 
-    if (artifactProps.filter((e) => e.type === c.type).length > 1 && false === numeric) {
-      ++index;
-    }
-
-    if (undefined === index) {
+    if ("number" !== typeof index) {
       continue;
     }
 
     // 小词条按照一半计算
-    const nums = parseFloat(c.value) / (numeric ? 1 : 100) / global.artifacts.values[0][index] / (numeric ? 2 : 1);
+    const nums =
+      parseFloat(c.value) /
+      (true === percentage ? 100 : 1) /
+      global.artifacts.values[0][index] /
+      (true === numeric ? 2 : 1);
 
     all += nums;
 
