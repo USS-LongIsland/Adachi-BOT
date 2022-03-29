@@ -27,16 +27,16 @@ function toReadableDate(date, format) {
   function adjust(c) {
     const str = items[c[0]] || "";
 
-    return c.length < str.length ? str.slice(0 - c.length) : "0".repeat(c.length - str.length) + str;
+    return c.length < str.length ? str.slice(0 - c.length) : str.padStart(c.length, "0");
   }
 
   const items = {
-    y: date.getFullYear(),
-    M: date.getMonth() + 1,
+    Y: date.getFullYear(),
+    m: date.getMonth() + 1,
     d: date.getDate(),
-    h: date.getHours(),
-    m: date.getMinutes(),
-    s: date.getSeconds(),
+    H: date.getHours(),
+    M: date.getMinutes(),
+    S: date.getSeconds(),
   };
 
   Object.keys(items).forEach((c) => (items[c] = items[c].toString()));
@@ -52,7 +52,7 @@ function toReadableDate(date, format) {
   let str = fields[0] || "";
 
   for (let i = 0; i < delimiters.length; ++i) {
-    if (undefined !== fields[i + 1]) {
+    if ("string" === typeof fields[i + 1]) {
       str += delimiters[i] + fields[i + 1];
     }
   }
