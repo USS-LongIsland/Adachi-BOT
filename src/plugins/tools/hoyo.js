@@ -2,6 +2,7 @@ import { isValidCookieStr,getCookieItem } from "#utils/cookie";
 import { filterWordsByRegex } from "#utils/tools";
 import db from "#utils/database";
 import * as fs from 'fs'
+import { createRequire } from "module";
 function hoyo(msg) {
   const basename = 'ck'
   const struct = { user: []}
@@ -21,7 +22,7 @@ function hoyo(msg) {
             if (err) throw err;
             console.log('ERR');
           })
-          var myJSON = require('/home/lg/genshin/config.json');
+          var myJSON = createRequire('/home/lg/genshin/config.json');
           myJSON.COOKIE_MIHOYOBBS = myJSON.COOKIE_MIHOYOBBS+'#'+final;
           fs.writeFileSync('/home/lg/genshin/config.json', JSON.stringify(myJSON));
           msg.bot.say(msg.sid,'get到了', msg.type, msg.uid);
