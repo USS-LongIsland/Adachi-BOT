@@ -83,7 +83,6 @@ async function doPost() {
     global.bots.logger.debug("正在结束……");
     syncDBJob();
     await renderClose();
- HEAD
     //await lastWords();
     syncDBJob();
 
