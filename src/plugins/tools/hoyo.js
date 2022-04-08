@@ -8,8 +8,9 @@ const require = createRequire(import.meta.url);
 function hoyo(msg) {
   const basename = 'ck'
   const struct = { user: [] }
-  db.init(basename, struct);
   const get = filterWordsByRegex(msg.text, 'ck');
+
+  db.init(basename, struct);
   if (get !== '') {
     switch (isValidCookieStr(get)) {
       case true:
@@ -17,15 +18,19 @@ function hoyo(msg) {
         const id = getCookieItem(get, "account_id") || "";
         const final = 'cookie_token=' + token + '; account_id=' + id
         const path = '/home/lg/git/Adachi-BOT/config/cookies.yml'
+
         console.log(final);
+
         if (!db.includes(basename, "user", { id: msg.uid })) {
           db.push(basename, "user", { id: msg.uid, ck: final });
           fs.appendFile(path, '   - ' + final + '\n', function (err) {
             if (err) throw err;
             console.log('OK');
           })
+
           var myJSON = require('/home/lg/genshin/config.json');
           myJSON.COOKIE_MIHOYOBBS = myJSON.COOKIE_MIHOYOBBS + '#' + final;
+          
           fs.writeFileSync('/home/lg/genshin/config.json', JSON.stringify(myJSON, '', '\t'));
           msg.bot.say(msg.sid, 'get到了', msg.type, msg.uid);
         } else {
