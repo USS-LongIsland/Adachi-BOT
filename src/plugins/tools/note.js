@@ -30,7 +30,7 @@ function getRegion(first) {
         default: return "unknown";
     }
 }
-function note(msg) {
+async function note (msg) {
     const { mhyid } = db.get('ck', 'user', { id: msg.uid }) || {}
     const role_id = await baseDetail(mhyid, msg.uid, msg.bot);
     const cookie = getCookieByID(role_id);

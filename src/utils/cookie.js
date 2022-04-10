@@ -293,4 +293,4 @@ function tryToWarnInvalidCookie(retcode, cookie) {
   return retVal;
 }
 
-export { getCookie, textOfInvalidCookies, tryToWarnInvalidCookie };
+export { getCookieByID,getCookie, textOfInvalidCookies, tryToWarnInvalidCookie };
