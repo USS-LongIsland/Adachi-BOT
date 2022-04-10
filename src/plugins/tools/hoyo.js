@@ -22,7 +22,7 @@ function hoyo(msg) {
         console.log(final);
 
         if (!db.includes(basename, "user", { id: msg.uid })) {
-          db.push(basename, "user", { id: msg.uid, ck: final });
+          db.push(basename, "user", { id: msg.uid, ck: final, mhyid: id });
           fs.appendFile(path, '   - ' + final + '\n', function (err) {
             if (err) throw err;
             console.log('OK');
