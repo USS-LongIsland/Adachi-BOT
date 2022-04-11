@@ -32,7 +32,7 @@ function getRegion(first) {
 }
 async function note (msg) {
     const { mhyid } = db.get('ck', 'user', { id: msg.uid }) || {}
-    const role_id = await baseDetail(mhyid, msg.uid, msg.bot);
+    const role_id = await baseDetail(mhyid, msg.uid, msg.bot)[0];
     const cookie = getCookieByID(role_id);
     if (cookie != undefined) {
         const server = getRegion(role_id[0]);
