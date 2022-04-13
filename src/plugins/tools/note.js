@@ -30,17 +30,37 @@ function getRegion(first) {
         default: return "unknown";
     }
 }
-async function note (msg) {
-    const { mhyid } = db.get('ck', 'user', { id: msg.uid }) || {}
-    const role_id = await baseDetail(mhyid, msg.uid, msg.bot)[0];
-    const cookie = getCookieByID(role_id);
-    if (cookie != undefined) {
-        const server = getRegion(role_id[0]);
-        const data = await getnote(role_id, server, cookie)
-        console.log(data)
-        msg.bot.say(msg.sid, '[Dev]获取当前树脂:' + data.data.current_resin, msg.type, msg.uid)
-    }
+async function note(msg) {
+    const { mhyID } = db.get('map', 'user', { userID: msg.uid })
+    const { UID } = db.get('map', 'user', { userID: msg.uid });
 
+    if (mhyID == undefined || UID == undefined) {
+        console.log(mhyID)
+        console.log(UID)
+        msg.bot.say(msg.sid, '请先绑定', msg.type, msg.uid)
+    } else {
+        //const role_id = await baseDetail(mhyid, msg.uid, msg.bot)[0];
+        if (db.includes('map', 'user', { userID: msg.uid })) {
+            const ckobj = getCookieByID(UID);
+            const cookiestr = ckobj.cookie;
+            console.log('cookie:::' + JSON.stringify(cookiestr))
+            const server = 'cn_gf01'
+            if (cookiestr != undefined) {
+                const { retcode, data, message } = await getnote(UID, server, cookiestr)
+                console.log(UID + server + cookiestr)
+                //console.log(data + '\n' + retcode)
+                if (retcode == 0) {
+                    msg.bot.say(msg.sid, '[Dev]获取当前树脂:' + data.current_resin, msg.type, msg.uid)
+                } else {
+                    msg.bot.say(msg.sid, '米游社接口报错:' + message, msg.type, msg.uid)
+                    console.log(UID + server + cookiestr)
+                }
+
+            } else {
+                msg.bot.say(msg.sid, '请先绑定cookie', msg.type, msg.uid)
+            }
+        }
+    }
 }
 
 export { note }

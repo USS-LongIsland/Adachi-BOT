@@ -42,7 +42,7 @@ async function Plugin(msg) {
       break;
     case hasEntrance(msg.text, "tools", "note"):
       if (false !== checkAuth(msg, "note")) {
-        hoyo(msg);
+        note(msg);
       }
       break;
     case hasEntrance(msg.text, "tools", "help"):
