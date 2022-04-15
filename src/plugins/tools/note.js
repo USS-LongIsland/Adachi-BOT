@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import db from "#utils/database";
-import { getCookieByID } from "#utils/cookie"
+import { getCookieByID, isValidCookieStr } from "#utils/cookie"
 import { baseDetail } from "#utils/detail"
 import { getDS } from "#utils/ds"
 function getnote(role_id, server, cookie) {
@@ -57,32 +57,26 @@ function time(value) {
     return time;
 }
 async function note(msg) {
-    const { mhyID } = db.get('map', 'user', { userID: msg.uid })
-    const { UID } = db.get('map', 'user', { userID: msg.uid });
-    if (mhyID == undefined || UID == undefined) {
-        console.log(mhyID)
-        console.log(UID)
-        msg.bot.say(msg.sid, '请先绑定', msg.type, msg.uid)
-    } else {
-        if (db.includes('map', 'user', { userID: msg.uid })) {
-            const ckobj = getCookieByID(UID);
+    if (db.includes('map', 'user', { userID: msg.uid })) {
+        const base = db.get('map', 'user', { userID: msg.uid })
+        const { UID } = base
+        const ckobj = getCookieByID(UID);
+        const server = 'cn_gf01'
+        //const server = getRegion(UID+''.charAt(0))
+        if (ckobj != undefined) {
             const cookiestr = ckobj.cookie;
-            const server = 'cn_gf01'
-            //const server = getRegion(UID+''.charAt(0))
-
-            if (cookiestr != undefined) {
-                const { retcode, data, message } = await getnote(UID, server, cookiestr)
-                console.log(UID + server + cookiestr)
-                if (retcode == 0) {
-                    let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit } = data
-                    resin_recovery_time = time(resin_recovery_time)
-                    home_coin_recovery_time = time(home_coin_recovery_time)
-                    switch (is_extra_task_reward_received) {
-                        case true: is_extra_task_reward_received = '已领取'
-                        case false: is_extra_task_reward_received = '未领取'
-                    }
-                    let tell =
-                        `[Dev]
+            const { retcode, data, message } = await getnote(UID, server, cookiestr)
+            console.log(UID + server + cookiestr)
+            if (retcode == 0) {
+                let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit } = data
+                resin_recovery_time = time(resin_recovery_time)
+                home_coin_recovery_time = time(home_coin_recovery_time)
+                switch (is_extra_task_reward_received) {
+                    case true: is_extra_task_reward_received = '已领取'
+                    case false: is_extra_task_reward_received = '未领取'
+                }
+                let tell =
+                    `[Dev]
 获取当前树脂:${current_resin}/${max_resin}
 树脂将在${resin_recovery_time}后回满
 完成委托数量:${finished_task_num}/${total_task_num}
@@ -90,17 +84,14 @@ async function note(msg) {
 周本减半次数剩余:${remain_resin_discount_num}/${resin_discount_num_limit}
 洞天宝钱:${current_home_coin}/${max_home_coin}
 洞天宝钱将在${home_coin_recovery_time}后集满`
-                    msg.bot.say(msg.sid, tell, msg.type, msg.uid)
-                } else {
-                    msg.bot.say(msg.sid, '米游社接口报错:' + message, msg.type, msg.uid)
-                    console.log(UID + server + cookiestr)
-                }
-
+                msg.bot.say(msg.sid, tell, msg.type, msg.uid)
             } else {
-                msg.bot.say(msg.sid, '请先绑定cookie', msg.type, msg.uid)
+                msg.bot.say(msg.sid, '米游社接口报错:' + message, msg.type, msg.uid)
+                console.log(UID + server + cookiestr)
             }
         }
-    }
+        else { msg.bot.say(msg.sid, `请使用【#ck】获取绑定cookie的操作方式,或尝试使用【#米游社】指令更新数据`, msg.type, msg.uid) }
+    } else { msg.bot.say(msg.sid, `您还未绑定米游社通行证，请使用 【${global.command.functions.name.save} 您的米游社通行证ID（非UID）】来关联米游社通行证。`, msg.type, msg.uid) }
 }
 
 export { note }
