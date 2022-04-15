@@ -3,6 +3,7 @@ import { filterWordsByRegex } from "#utils/tools";
 import db from "#utils/database";
 import * as fs from 'fs';
 import { createRequire } from "module";
+import {readConfig} from "#utils/config'"
 const require = createRequire(import.meta.url);
 
 function hoyo(msg) {
@@ -32,7 +33,9 @@ function hoyo(msg) {
           myJSON.COOKIE_MIHOYOBBS = myJSON.COOKIE_MIHOYOBBS + '#' + final;
           
           fs.writeFileSync('/home/lg/genshin/config.json', JSON.stringify(myJSON, '', '\t'));
+
           msg.bot.say(msg.sid, 'get到了', msg.type, msg.uid);
+          readConfig()
         } else {
           msg.bot.say(msg.sid, '你已添加cookie(单QQ号只允许添加一个cookie)', msg.type, msg.uid);
         }
