@@ -106,7 +106,7 @@ async function note(msg) {
                 console.log(UID + server + cookiestr)
             }
         }
-        else { msg.bot.say(msg.sid, `请使用【#ck】获取绑定cookie的操作方式,或尝试使用【#米游社】指令更新数据`, msg.type, msg.uid) }
+        else { msg.bot.say(msg.sid, `未绑定cookie或uid未更新,请使用【#ck】获取绑定cookie的操作方式,或尝试使用【#米游社】指令更新数据`, msg.type, msg.uid) }
     } else { msg.bot.say(msg.sid, `您还未绑定米游社通行证，请使用 【${global.command.functions.name.save} 您的米游社通行证ID（非UID）】来关联米游社通行证。`, msg.type, msg.uid) }
 }
 
