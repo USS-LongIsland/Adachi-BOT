@@ -68,12 +68,27 @@ async function note(msg) {
             const { retcode, data, message } = await getnote(UID, server, cookiestr)
             console.log(UID + server + cookiestr)
             if (retcode == 0) {
-                let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit } = data
+                console.log(JSON.stringify(data))
+                let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit, transformer } = data
+                let { obtained, recovery_time } = transformer
+                let { Day, Hour, Minute, reached } = recovery_time
                 resin_recovery_time = time(resin_recovery_time)
                 home_coin_recovery_time = time(home_coin_recovery_time)
                 switch (is_extra_task_reward_received) {
                     case true: is_extra_task_reward_received = '已领取'
                     case false: is_extra_task_reward_received = '未领取'
+                }
+                let trans
+                let transtime
+                if (reached) {
+                    trans = '已经可以使用'
+                } else {
+                    if (Day != 0) {
+                        transtime = `约${Day}天后可用`
+                    } else {
+                        transtime = `约${Hour}小时${Minute}分后可用`
+                    }
+                    trans = (obtained ? transtime : "未获取,先去璃月完成「天遒宝迹」任务吧")
                 }
                 let tell =
                     `[Dev]
@@ -83,7 +98,8 @@ async function note(msg) {
 每日委托奖励:${is_extra_task_reward_received}
 周本减半次数剩余:${remain_resin_discount_num}/${resin_discount_num_limit}
 洞天宝钱:${current_home_coin}/${max_home_coin}
-洞天宝钱将在${home_coin_recovery_time}后集满`
+洞天宝钱将在${home_coin_recovery_time}后集满
+参量质变仪:${trans}`
                 msg.bot.say(msg.sid, tell, msg.type, msg.uid)
             } else {
                 msg.bot.say(msg.sid, '米游社接口报错:' + message, msg.type, msg.uid)
