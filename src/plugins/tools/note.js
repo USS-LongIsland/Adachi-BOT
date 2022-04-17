@@ -69,7 +69,7 @@ async function note(msg) {
             console.log(UID + server + cookiestr)
             if (retcode == 0) {
                 console.log(JSON.stringify(data))
-                let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit, transformer } = data
+                let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit, expeditions, transformer } = data
                 let { obtained, recovery_time } = transformer
                 let { Day, Hour, Minute, reached } = recovery_time
                 resin_recovery_time = time(resin_recovery_time)
@@ -90,12 +90,30 @@ async function note(msg) {
                     }
                     trans = (obtained ? transtime : "未获取,先去璃月完成「天遒宝迹」任务吧")
                 }
+                let expmax
+                let expstat
+                let exptime = []
+                let length = 0
+                while (length < expeditions.length) {
+                    expeditions.forEach(function (val) {
+                        exptime.push(parseInt(val.remained_time))
+                        length++
+                    })
+                }
+                expmax = Math.max(...exptime)
+                if (expmax == 0) {
+                    expstat = '已完成'
+                } else {
+                    expmax = time(expmax)
+                    expstat = `将在${expmax}后完成`
+                }
                 let tell =
                     `[Dev]
 获取当前树脂:${current_resin}/${max_resin}
 树脂将在${resin_recovery_time}后回满
 完成委托数量:${finished_task_num}/${total_task_num}
 每日委托奖励:${is_extra_task_reward_received}
+探索派遣:${expstat}
 周本减半次数剩余:${remain_resin_discount_num}/${resin_discount_num_limit}
 洞天宝钱:${current_home_coin}/${max_home_coin}
 洞天宝钱将在${home_coin_recovery_time}后集满
