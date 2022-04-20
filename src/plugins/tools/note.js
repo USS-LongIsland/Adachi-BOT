@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import db from "#utils/database";
 import { getCookieByID } from "#utils/cookie"
 import { getDS } from "#utils/ds"
-function getnote(role_id, server, cookie) {
+async function getnote(role_id, server, cookie) {
     const query = { role_id, server };
     const m_HEADERS = {
         "User-Agent":
@@ -14,11 +14,11 @@ function getnote(role_id, server, cookie) {
         Cookie: "",
     };
 
-    return fetch(`https://api-takumi.mihoyo.com/game_record/app/genshin/api/dailyNote?${new URLSearchParams(query)}`, {
+    const res = await fetch(`https://api-takumi.mihoyo.com/game_record/app/genshin/api/dailyNote?${new URLSearchParams(query)}`, {
         method: "GET",
         headers: { ...m_HEADERS, DS: getDS(query), Cookie: cookie },
-    })
-        .then((res) => res.json());
+    });
+    return await res.json();
 }
 function getRegion(first) {
     switch (first) {
