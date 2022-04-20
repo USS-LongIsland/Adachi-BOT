@@ -1,7 +1,6 @@
 import fetch from "node-fetch";
 import db from "#utils/database";
-import { getCookieByID, isValidCookieStr } from "#utils/cookie"
-import { baseDetail } from "#utils/detail"
+import { getCookieByID } from "#utils/cookie"
 import { getDS } from "#utils/ds"
 function getnote(role_id, server, cookie) {
     const query = { role_id, server };
@@ -61,8 +60,7 @@ async function note(msg) {
         const base = db.get('map', 'user', { userID: msg.uid })
         const { UID } = base
         const ckobj = getCookieByID(UID);
-        const server = 'cn_gf01'
-        //const server = getRegion(UID+''.charAt(0))
+        const server = getRegion(JSON.stringify(UID)[0])
         if (ckobj != undefined) {
             const cookiestr = ckobj.cookie;
             const { retcode, data, message } = await getnote(UID, server, cookiestr)
@@ -74,10 +72,8 @@ async function note(msg) {
                 let { Day, Hour, Minute, reached } = recovery_time
                 resin_recovery_time = time(resin_recovery_time)
                 home_coin_recovery_time = time(home_coin_recovery_time)
-                switch (is_extra_task_reward_received) {
-                    case true: is_extra_task_reward_received = '已领取'
-                    case false: is_extra_task_reward_received = '未领取'
-                }
+
+		is_extra_task_reward_received = (is_extra_task_reward_received ? '已领取' : '未领取')    
                 let trans
                 let transtime
                 if (reached) {
