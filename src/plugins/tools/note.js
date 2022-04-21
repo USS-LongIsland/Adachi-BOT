@@ -73,7 +73,7 @@ async function note(msg) {
                 resin_recovery_time = time(resin_recovery_time)
                 home_coin_recovery_time = time(home_coin_recovery_time)
 
-		is_extra_task_reward_received = (is_extra_task_reward_received ? '已领取' : '未领取')    
+                is_extra_task_reward_received = (is_extra_task_reward_received ? '已领取' : '未领取')
                 let trans
                 let transtime
                 if (reached) {
@@ -81,8 +81,12 @@ async function note(msg) {
                 } else {
                     if (Day != 0) {
                         transtime = `约${Day}天后可用`
-                    } else {
-                        transtime = `约${Hour}小时${Minute}分后可用`
+                    }
+                    if (Hour != 0) {
+                        transtime = `约${Hour}小时后可用`
+                    }
+                    if (Minute == 0) {
+                        transtime = `约${Minute}分后可用`
                     }
                     trans = (obtained ? transtime : "未获取,先去璃月完成「天遒宝迹」任务吧")
                 }
