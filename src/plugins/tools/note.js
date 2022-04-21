@@ -85,7 +85,7 @@ async function note(msg) {
                     if (Hour != 0) {
                         transtime = `约${Hour}小时后可用`
                     }
-                    if (Minute == 0) {
+                    if (Minute != 0) {
                         transtime = `约${Minute}分后可用`
                     }
                     trans = (obtained ? transtime : "未获取,先去璃月完成「天遒宝迹」任务吧")
