@@ -70,8 +70,17 @@ async function note(msg) {
                 let { current_resin, max_resin, resin_recovery_time, finished_task_num, total_task_num, is_extra_task_reward_received, max_home_coin, current_home_coin, home_coin_recovery_time, remain_resin_discount_num, resin_discount_num_limit, expeditions, transformer } = data
                 let { obtained, recovery_time } = transformer
                 let { Day, Hour, Minute, reached } = recovery_time
-                resin_recovery_time = time(resin_recovery_time)
-                home_coin_recovery_time = time(home_coin_recovery_time)
+                if (resin_recovery_time == "0") {
+                    resin_recovery_time = "已回满"
+                } else {
+                    resin_recovery_time = "将在"+time(resin_recovery_time)+"后回满"
+                }
+                if (home_coin_recovery_time == "0") {
+                    home_coin_recovery_time = "已集满"
+                } else {
+                    home_coin_recovery_time = "将在"+time(home_coin_recovery_time)+"后集满"
+                }
+
 
                 is_extra_task_reward_received = (is_extra_task_reward_received ? '已领取' : '未领取')
                 let trans
@@ -110,13 +119,13 @@ async function note(msg) {
                 let tell =
                     `[Dev]
 获取当前树脂:${current_resin}/${max_resin}
-树脂将在${resin_recovery_time}后回满
+树脂回复:${resin_recovery_time}
 完成委托数量:${finished_task_num}/${total_task_num}
 每日委托奖励:${is_extra_task_reward_received}
 探索派遣:${expstat}
 周本减半次数剩余:${remain_resin_discount_num}/${resin_discount_num_limit}
 洞天宝钱:${current_home_coin}/${max_home_coin}
-洞天宝钱将在${home_coin_recovery_time}后集满
+洞天宝钱:${home_coin_recovery_time}
 参量质变仪:${trans}`
                 msg.bot.say(msg.sid, tell, msg.type, msg.uid)
             } else {
