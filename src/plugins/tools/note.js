@@ -46,7 +46,7 @@ function time(value) {
             minuteTime = parseInt(minuteTime % 60);
             if (hourTime > 24){
                 dayTime = parseInt(hourTime / 24)
-                hourTime = parseInt(minuteTime % 60)
+                hourTime = parseInt(hourTime % 60)
             }
         }
     }
