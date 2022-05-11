@@ -5,7 +5,15 @@ import { getCache } from "#utils/cache";
 import { render } from "#utils/render";
 import { getWordByRegex } from "#utils/tools";
 
-const mUrls = { weekly: getUrl("/2022/03/29/75833613/7cef666b6a5fa3f12785e6e4406a060f_4832769786132969938.png") };
+// 如果注释中的链接失效，尝试在米游社中搜索用户“好多梨”。
+const mUrls = {
+  // https://bbs.mihoyo.com/ys/obc/content/1226/detail
+  talent: getUrl("/2022/03/29/75833613/69d523a33403d6ad92e4affd24efac3c_6498559115690701376.png"),
+  // https://bbs.mihoyo.com/ys/obc/content/1187/detail
+  weapon: getUrl("/2022/03/29/75833613/bbae33c9be2a1c4fa6523986cdb55508_5702485684285015782.png"),
+  // https://bbs.mihoyo.com/ys/obc/content/1226/detail
+  weekly: getUrl("/2022/03/29/75833613/7cef666b6a5fa3f12785e6e4406a060f_4832769786132969938.png"),
+};
 
 function getUrl(p) {
   return `https://uploadstatic.mihoyo.com/ys-obc/${"/" === p[0] ? p.substring(1) : p}`;
@@ -14,7 +22,7 @@ function getUrl(p) {
 async function doMaterial(msg, url) {
   const cacheDir = path.resolve(global.datadir, "image", "material");
 
-  if (url === mUrls.weekly) {
+  if ([mUrls.talent, mUrls.weapon, mUrls.weekly].includes(url)) {
     const data = await getCache(url, cacheDir, "base64");
     const text = `[CQ:image,type=image,file=base64://${data}]`;
     msg.bot.say(msg.sid, text, msg.type, msg.uid);
