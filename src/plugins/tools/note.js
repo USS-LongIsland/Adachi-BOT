@@ -133,7 +133,7 @@ async function note(msg) {
 探索派遣:${expstat}
 周本减半次数剩余:${remain_resin_discount_num}/${resin_discount_num_limit}
 洞天宝钱:${current_home_coin}/${max_home_coin}
-洞天宝钱:${home_coin_recovery_time}
+宝钱收集:${home_coin_recovery_time}
 参量质变仪:${trans}`
                 msg.bot.say(msg.sid, tell, msg.type, msg.uid)
             } else {
