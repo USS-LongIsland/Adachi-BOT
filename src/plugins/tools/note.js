@@ -14,7 +14,7 @@ async function getnote(role_id, server, cookie) {
         Cookie: "",
     };
 
-    const res = await fetch(`https://api-takumi.mihoyo.com/game_record/app/genshin/api/dailyNote?${new URLSearchParams(query)}`, {
+    const res = await fetch(`https://api-takumi-record.mihoyo.com/game_record/app/genshin/api/dailyNote?${new URLSearchParams(query)}`, {
         method: "GET",
         headers: { ...m_HEADERS, DS: getDS(query), Cookie: cookie },
     });
