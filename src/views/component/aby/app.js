@@ -1,7 +1,7 @@
 import { getParams, html, toReadableDate } from "../common/utils.js";
 import { challengeTitle, characterShowbox } from "./abyssComponents.js";
 
-const { defineComponent, defineAsyncComponent } = window.Vue;
+const { defineComponent, defineAsyncComponent, unref } = window.Vue;
 const avatarTemplate = html`
   <div v-if="isValidData" class="container-character-rounded" :class="className">
     <p class="sub-title">{{title}}</p>
@@ -31,20 +31,15 @@ const avatarBox = defineComponent({
     },
   },
   setup(props) {
-    const title = props.data.title;
-    const className = props.data.className;
-    let isValidData = false;
-    if (props.data["value"].length > 0) {
-      if (
-        Object.prototype.hasOwnProperty.call(props.data.value[0], "avatar_icon") &&
-        Object.prototype.hasOwnProperty.call(props.data.value[0], "value") &&
-        Object.prototype.hasOwnProperty.call(props.data.value[0], "rarity")
-      ) {
-        isValidData = true;
-      }
-    }
-
-    const value = isValidData ? props.data.value : [];
+    const propsValue = unref(props);
+    const title = propsValue.data.title;
+    const className = propsValue.data.className;
+    const isValidData =
+      propsValue.data["value"].length > 0 &&
+      "avatar_icon" in propsValue.data.value[0] &&
+      "value" in propsValue.data.value[0] &&
+      "rarity" in propsValue.data.value[0];
+    const value = isValidData ? propsValue.data.value : [];
 
     return {
       title,
@@ -170,11 +165,11 @@ export default defineComponent({
 
     for (const [key, value] of Object.entries(params.data)) {
       if (key.endsWith("_rank")) {
-        value.forEach((v) =>
-          Object.prototype.hasOwnProperty.call(v, "avatar_icon") && !shown_avatars.includes(v.avatar_icon)
-            ? shown_avatars.push(v.avatar_icon)
-            : 0
-        );
+        value.forEach((v) => {
+          if ("string" === typeof v.avatar_icon && !shown_avatars.includes(v.avatar_icon)) {
+            shown_avatars.push(v.avatar_icon);
+          }
+        });
       }
     }
     const randomAvatar = Math.floor(Math.random() * shown_avatars.length);
