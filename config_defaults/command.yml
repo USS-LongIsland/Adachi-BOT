@@ -228,7 +228,11 @@ tools:
   enable: true
   weights: 99
   regex:
+<<<<<<< HEAD
     - ^(help|roll|菜单|管理(命令|功能)|伟大的升华|求签|占卜|绑定ck)\s*$
+=======
+    - ^(help|roll|菜单|管理(命令|功能)|求签|占卜)\s*$
+>>>>>>> upstream/master
     - ^(今天)?[吃喝]什么\s*$
     - ^roll\s*[+-]?\d+\s*$
     - ^带(个)?话\s*.+$
@@ -264,16 +268,6 @@ tools:
       description: 掷骰子
       entrance:
         - ^roll
-    quote:
-      type: command
-      show: false
-      weights: 9699
-      name: 伟大的升华
-      usage: null
-      revert: false
-      description: null
-      entrance:
-        - ^伟大的升华
     feedback:
       type: command
       show: true
