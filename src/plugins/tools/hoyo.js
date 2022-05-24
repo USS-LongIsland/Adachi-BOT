@@ -1,4 +1,4 @@
-import { isValidCookieStr, getCookieItem } from "#utils/cookie";
+import { getCookieItem, isValidCookieStr } from "#utils/cookie";
 import { filterWordsByRegex } from "#utils/tools";
 import db from "#utils/database";
 import * as fs from 'fs';
@@ -13,13 +13,15 @@ function hoyo(msg) {
 
   db.init(basename, struct);
   if (get !== '') {
+    let token = "";
+    let id = "";
+    let final = "";
+    const path = '/home/lg/git/Adachi-BOT/config/cookies.yml'
     switch (isValidCookieStr(get)) {
       case true:
-        const token = getCookieItem(get, "cookie_token") || "";
-        const id = getCookieItem(get, "account_id") || "";
-        const final = 'cookie_token=' + token + '; account_id=' + id
-        const path = '/home/lg/git/Adachi-BOT/config/cookies.yml'
-
+        token = getCookieItem(get, "cookie_token") || "";
+        id = getCookieItem(get, "account_id") || "";
+        final = 'cookie_token=' + token + '; account_id=' + id
         console.log(final);
 
         if (!db.includes(basename, "user", { id: msg.uid })) {
