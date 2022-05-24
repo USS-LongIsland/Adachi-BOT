@@ -228,10 +228,12 @@ tools:
   enable: true
   weights: 99
   regex:
-    - ^(help|roll|菜单|管理(命令|功能)|求签|占卜|绑定ck)\s*$
+    - ^(help|roll|菜单|管理(命令|功能)|求签|占卜|ck)\s*$
     - ^(今天)?[吃喝]什么\s*$
     - ^roll\s*[+-]?\d+\s*$
     - ^带(个)?话\s*.+$
+    - ^ck\s*.+$
+    - ^状态
   functions:
     menu:
       type: command
@@ -294,17 +296,26 @@ tools:
       description: 查看本帮助
       entrance:
         - ^help
-    HoYo:
+    hoyo:
       type: command
       show: true
       weights: 99
-      name: 签到
+      name: ck
       usage: null
       revert: false
       description: 查看米游社签到功能
       entrance:
-        - ^绑定ck
-        #- 
+        - ^ck
+    note:
+      type: command
+      show: true
+      weights: 99
+      name: 状态
+      usage: null
+      revert: false
+      description: 查看米游社每日便笺[测试]
+      entrance:
+        - ^状态    
 
 material:
   enable: true
