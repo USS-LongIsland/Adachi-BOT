@@ -47,7 +47,7 @@ function hoyo(msg) {
         break;
     }
   } else {
-    msg.bot.say(msg.sid, '米游社自动签到功能指引:私聊 私聊 私聊(不私聊号没了不关我事)输入 #ck空格你的cookie来添加,请像保护密码一样保护你的cookie\n获取教程:https://www.bilibili.com/video/BV1d3411p7e3/\n添加则视为同意加入机器人查询功能(诸如"米游社","深渊")所需的cookie池,更改米哈游通行证密码会使当前cookie直接失效', msg.type, msg.uid);
+    msg.bot.say(msg.sid, '米游社自动签到功能指引:私聊 私聊 私聊(不私聊号没了不关我事)输入 #ck空格你的cookie来添加,请像保护密码一样保护你的cookie\n获取教程:https://www.bilibili.com/video/BV1d3411p7e3/\n添加则视为同意加入机器人查询功能(诸如"米游社","深渊")所需的公共cookie池,扫码登陆米游社或更改米哈游通行证密码会使当前cookie直接失效', msg.type, msg.uid);
   }
 }
 export { hoyo }
