@@ -44,7 +44,7 @@ function time(value) {
             hourTime = parseInt(minuteTime / 60);
             //获取小时后取佘的分，获取分钟除以60取佘的分
             minuteTime = parseInt(minuteTime % 60);
-            if (hourTime > 24){
+            if (hourTime > 24) {
                 dayTime = parseInt(hourTime / 24)
                 hourTime = parseInt(hourTime % 60)
             }
@@ -58,7 +58,7 @@ function time(value) {
     if (hourTime > 0) {
         time = "" + parseInt(hourTime) + "小时" + time;
     }
-    if (dayTime > 0){
+    if (dayTime > 0) {
         time = "" + parseInt(dayTime) + "天" + time;
     }
     return time;
@@ -81,12 +81,12 @@ async function note(msg) {
                 if (resin_recovery_time == "0") {
                     resin_recovery_time = "已回满"
                 } else {
-                    resin_recovery_time = "将在"+time(resin_recovery_time)+"后回满"
+                    resin_recovery_time = "将在" + time(resin_recovery_time) + "后回满"
                 }
                 if (home_coin_recovery_time == "0") {
                     home_coin_recovery_time = "已集满"
                 } else {
-                    home_coin_recovery_time = "将在"+time(home_coin_recovery_time)+"后集满"
+                    home_coin_recovery_time = "将在" + time(home_coin_recovery_time) + "后集满"
                 }
 
 
@@ -135,6 +135,9 @@ async function note(msg) {
 洞天宝钱:${current_home_coin}/${max_home_coin}
 宝钱收集:${home_coin_recovery_time}
 参量质变仪:${trans}`
+                if (current_resin == max_resin) {
+                    tell = tell + '\n' + '你现在这个树脂睡得着觉吗?'
+                }
                 msg.bot.say(msg.sid, tell, msg.type, msg.uid)
             } else {
                 msg.bot.say(msg.sid, '米游社接口报错:' + message, msg.type, msg.uid)
