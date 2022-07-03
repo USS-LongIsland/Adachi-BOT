@@ -31,7 +31,7 @@ function getCookieItem(cookieStr, item = "account_id") {
     }
   }
 }
-export {getCookieItem}
+export { getCookieItem };
 function isValidCookieStr(cookieStr) {
   return !!(
     "string" === typeof cookieStr &&
@@ -39,7 +39,7 @@ function isValidCookieStr(cookieStr) {
     getCookieItem(cookieStr, "account_id")
   );
 }
-export { isValidCookieStr }
+export { isValidCookieStr };
 function getCookieByID(uid) {
   const dbName = "map";
 
@@ -293,4 +293,4 @@ function tryToWarnInvalidCookie(retcode, cookie) {
   return retVal;
 }
 
-export { getCookieByID,getCookie, textOfInvalidCookies, tryToWarnInvalidCookie };
+export { getCookieByID, getCookie, textOfInvalidCookies, tryToWarnInvalidCookie };

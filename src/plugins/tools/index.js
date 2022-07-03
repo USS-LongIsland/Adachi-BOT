@@ -1,11 +1,11 @@
 import { feedback } from "#plugins/tools/feedback";
+import { hoyo } from "#plugins/tools/hoyo";
 import { menu } from "#plugins/tools/menu";
+import { note } from "#plugins/tools/note";
 import { prophecy } from "#plugins/tools/prophecy";
 import { roll } from "#plugins/tools/roll";
 import { checkAuth } from "#utils/auth";
 import { hasEntrance } from "#utils/config";
-import { hoyo } from "#plugins/tools/hoyo";
-import {note} from "#plugins/tools/note";
 
 async function Plugin(msg) {
   switch (true) {
