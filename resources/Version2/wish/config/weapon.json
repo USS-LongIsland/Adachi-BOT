@@ -74,7 +74,7 @@
     "天空之脊":"polearm",
     "贯虹之槊":"polearm",
     "喜多院十文字":"polearm",
-    "「渔获」":"polearm",
+    "渔获":"polearm",
     "薙草之稻光":"polearm",
     "息灾":"polearm",
     "学徒笔记":"catalyst",
@@ -88,6 +88,7 @@
     "万国诸海图谱":"catalyst",
     "暗巷的酒与诗":"catalyst",
     "宗室秘法录":"catalyst",
+    "嘟嘟可故事集":"catalyst",
     "流浪乐章":"catalyst",
     "匣里日月":"catalyst",
     "西风秘典":"catalyst",
@@ -120,6 +121,7 @@
     "西风猎弓":"bow",
     "弓藏":"bow",
     "钢轮弓":"bow",
+    "落霞":"bow",
     "终末嗟叹之诗":"bow",
     "天空之翼":"bow",
     "阿莫斯之弓":"bow",
@@ -128,5 +130,6 @@
     "破魔之弓":"bow",
     "掠食者":"bow",
     "曚云之月":"bow",
-    "冬极白星":"bow"
+    "冬极白星":"bow",
+    "若水":"bow"
 }
