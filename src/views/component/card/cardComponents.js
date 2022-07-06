@@ -1,6 +1,6 @@
 import { html } from "../common/utils.js";
 
-const { defineComponent } = window.Vue;
+const { defineComponent, unref } = window.Vue;
 const titleTemplate = html` <div class="container-title">
   <div class="title-content">
     <img
@@ -35,14 +35,15 @@ const charBoxTemplate = html` <div class="character-box">
   <img
     v-if="hasCostume"
     class="main"
-    :src="costumePath"
+    :src="characterThumbUrl"
     :style="{ 'background-image': 'url(' + starBackground + ')' }"
+    v-costume="costumePath"
     alt="ERROR"
   />
   <img
     v-else
     class="main"
-    :src="data.icon"
+    :src="characterThumbUrl"
     :style="{ 'background-image': 'url(' + starBackground + ')' }"
     alt="ERROR"
   />
@@ -63,8 +64,12 @@ const CharacterBox = defineComponent({
   template: charBoxTemplate,
   props: {
     data: Object,
+    characterName: [String, undefined],
   },
   setup(props) {
+    const propsValue = unref(props);
+    const characterName = propsValue.characterName;
+
     function getCostume(costumeName) {
       return encodeURI(`http://localhost:9934/resources/Version2/costumes/avatars/${costumeName}.png`);
     }
@@ -79,7 +84,15 @@ const CharacterBox = defineComponent({
     const weaponNameLength = props.data.weapon.name.length || 5;
     const additionalStyle = weaponNameLength > 5 ? "font-size: 9px;" : undefined;
 
-    return { starBackground, element, hasCostume, costumePath, additionalStyle };
+    const characterThumbUrl = characterName
+      ? "旅行者" !== characterName
+        ? encodeURI(`/resources/Version2/thumb/character/${characterName}.png`)
+        : props.data.icon.match(/PlayerGirl/g)
+        ? encodeURI("/resources/Version2/thumb/character/荧.png")
+        : encodeURI("/resources/Version2/thumb/character/空.png")
+      : props.data.icon;
+
+    return { starBackground, element, hasCostume, costumePath, additionalStyle, characterThumbUrl };
   },
 });
 const explorationBoxTemplate = html` <div class="exploration">

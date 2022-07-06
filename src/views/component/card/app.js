@@ -6,7 +6,7 @@ const lodash = window._;
 
 const template = html`
   <div class="card-container">
-    <img class="avatar" :src="namecardAvatar" />
+    <img class="avatar" :src="namecardAvatar" v-costume="namecardAvatarBackupImg" />
     <div class="namecard-container" :style="{'background': nameCard}">
       <div class="player-info-container">
         <p v-if="hasPlayerNameInfo" class="player-name">{{ playerNickname }}</p>
@@ -58,7 +58,11 @@ const template = html`
           :subtitle="characters.length < stats.avatar_number ? '仅展示米游社人物展柜中的至多8个人物' : !1"
         />
         <div class="container-character-box main-content">
-          <CharacterBox v-for="character in characters" :data="character" />
+          <CharacterBox
+            v-for="character in characters"
+            :data="character"
+            :characterName="getCharacterName(character.id)"
+          />
         </div>
       </div>
       <!-- 数据 container 结束 -->
@@ -85,6 +89,7 @@ export default defineComponent({
     const targetHasCostume = params.avatars[randomAvatarOrder]["costumes"].length !== 0;
     const costumeName = targetHasCostume ? params.avatars[randomAvatarOrder]["costumes"][0]["name"] : "";
     const qqid = params.qqid || "";
+    const charactersMap = params.character;
 
     const ye = { 10000005: "空", 10000007: "荧" };
     const name = ye[target.id] || target.name;
@@ -97,6 +102,7 @@ export default defineComponent({
       : encodeURI(`http://localhost:9934/resources/Version2/thumb/character/${name}.png`);
 
     const namecardAvatar = "" !== qqid ? `https://q1.qlogo.cn/g?b=qq&s=5&nk=${qqid}` : character;
+    const namecardAvatarBackupImg = encodeURI(`http://localhost:9934/resources/Version2/thumb/character/${name}.png`);
 
     const filterOfferingName = (string) => string.replace(/等级$/, "");
 
@@ -181,18 +187,24 @@ export default defineComponent({
     const characters = params.avatars || [];
     const homeComfort = Math.max(...params.homes.map((home) => home.comfort_num || 0));
 
+    const getCharacterName = (characterID) =>
+      (charactersMap.filter((character) => character.id === characterID)[0] || {}).name;
+
     return {
       playerUid: uid,
       playerNickname: nickname,
       playerLevel: level,
       nameCard,
       namecardAvatar,
+      namecardAvatarBackupImg,
       characters,
       explorations,
       stats: params.stats,
       homeComfort: "number" === typeof homeComfort && -Infinity !== homeComfort ? homeComfort : "暂无数据",
       hasLevelInfo,
       hasPlayerNameInfo,
+      charactersMap,
+      getCharacterName,
     };
   },
 });
