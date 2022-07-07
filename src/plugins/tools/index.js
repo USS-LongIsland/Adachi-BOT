@@ -30,14 +30,10 @@ async function Plugin(msg) {
       }
       break;
     case hasEntrance(msg.text, "tools", "hoyo"):
-      if (false !== checkAuth(msg, "hoyo")) {
         hoyo(msg);
-      }
       break;
     case hasEntrance(msg.text, "tools", "note"):
-      if (false !== checkAuth(msg, "note")) {
         note(msg);
-      }
       break;
     case hasEntrance(msg.text, "tools", "help"):
       msg.bot.say(msg.sid, global.command.usage, msg.type, msg.uid, false, "\n");
