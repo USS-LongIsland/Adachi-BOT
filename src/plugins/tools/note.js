@@ -36,23 +36,19 @@ function getRegion(first) {
       return "unknown";
   }
 }
-function time(value) {
-  var secondTime = parseInt(value); // 秒
-  var minuteTime = 0; // 分
-  var hourTime = 0; // 小时
+function time(v) {
+  var secondTime = parseInt(v);
+  var minuteTime = 0;
+  var hourTime = 0;
   var dayTime = 0;
   if (secondTime > 60) {
-    //如果秒数大于60，将秒数转换成整数
-    //获取分钟，除以60取整数，得到整数分钟
     minuteTime = parseInt(secondTime / 60);
-    //获取秒数，秒数取佘，得到整数秒数
     secondTime = parseInt(secondTime % 60);
-    //如果分钟大于60，将分钟转换成小时
+
     if (minuteTime > 60) {
-      //获取小时，获取分钟除以60，得到整数小时
       hourTime = parseInt(minuteTime / 60);
-      //获取小时后取佘的分，获取分钟除以60取佘的分
       minuteTime = parseInt(minuteTime % 60);
+
       if (hourTime > 24) {
         dayTime = parseInt(hourTime / 24);
         hourTime = parseInt(hourTime % 60);
@@ -71,6 +67,15 @@ function time(value) {
     time = "" + parseInt(dayTime) + "天" + time;
   }
   return time;
+}
+function whenwill(v) {
+  const d = new Date()
+  const s = d.getTime()
+  d.setTime(s + 1000 * parseInt(v))
+  
+  const result = d.toLocaleString('zh-cn')
+
+  return result
 }
 async function note(msg) {
   if (db.includes("map", "user", { userID: msg.uid })) {
@@ -104,12 +109,12 @@ async function note(msg) {
         if (resin_recovery_time == "0") {
           resin_recovery_time = "已回满";
         } else {
-          resin_recovery_time = "将在" + time(resin_recovery_time) + "后回满";
+          resin_recovery_time = `将在${time(resin_recovery_time)}后回满\n(${whenwill(resin_recovery_time)})`;
         }
         if (home_coin_recovery_time == "0") {
           home_coin_recovery_time = "已集满";
         } else {
-          home_coin_recovery_time = "将在" + time(home_coin_recovery_time) + "后集满";
+          home_coin_recovery_time = `将在${time(home_coin_recovery_time)}后集满\n(${whenwill(home_coin_recovery_time)})`;
         }
 
         is_extra_task_reward_received = is_extra_task_reward_received ? "已领取" : "未领取";
