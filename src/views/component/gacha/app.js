@@ -62,7 +62,7 @@ export default defineComponent({
         item_name: "已折叠的三星武器",
         item_type: "武器",
         star: 3,
-        type: "sword",
+        type: "单手剑",
       };
     }
 
@@ -74,7 +74,7 @@ export default defineComponent({
     const isStatisticalData = params.data.length > 10;
     let gachaDataToShow =
       params.data.length > 10
-        ? params.five.concat(params.count.sort((x, y) => quickSortByRarity(x, y)).filter((item) => item.star < 5))
+        ? [...params.five, ...params.count.sort((x, y) => quickSortByRarity(x, y)).filter((item) => item.star < 5)]
         : params.data.sort((x, y) => quickSortByRarity(x, y));
     const compactGachaData = gachaDataToShow.filter((item) => item.star > 3);
     const epitomizedPath = params.path;
@@ -87,16 +87,16 @@ export default defineComponent({
             item_name: "已折叠的三星武器",
             item_type: "武器",
             star: 3,
-            type: "sword",
+            type: "单手剑",
           },
         ];
 
-        gachaDataToShow = compactGachaData.concat(threeStarItems);
+        gachaDataToShow = [...compactGachaData, ...threeStarItems];
       } else {
         const gachaStem = gachaDataToShow.slice(0, 9);
         const gachaResidue = gachaDataToShow.slice(9).reduce(reducer);
 
-        gachaDataToShow = gachaStem.concat(gachaResidue);
+        gachaDataToShow = [...gachaStem, ...gachaResidue];
       }
     }
 

@@ -1,12 +1,18 @@
 import { html } from "../common/utils.js";
 
-const { defineComponent, unref } = window.Vue;
+const { defineComponent, unref, inject } = window.Vue;
 
 const materialTemplate = html`<div class="unit">
   <div class="top-box">
     <div class="ascension-name">{{ ascensionName }}</div>
     <div class="materials-list">
-      <img v-for="name in data.ascension" class="materials" :src="materialImage(name)" alt="ERROR" />
+      <img
+        v-for="name in data.ascension"
+        class="materials"
+        :class="getMaterialRarityBackground(name)"
+        :src="materialImage(name)"
+        alt="ERROR"
+      />
     </div>
   </div>
   <div class="item-list">
@@ -21,6 +27,7 @@ const materialTemplate = html`<div class="unit">
     </div>
   </div>
 </div>`;
+
 const materialUnit = defineComponent({
   name: "MaterialUnit",
   template: materialTemplate,
@@ -28,6 +35,7 @@ const materialUnit = defineComponent({
     data: Object,
     type: String,
   },
+  inject: ["materialMap"],
   methods: {
     materialImage: (name) => `http://localhost:9934/resources/Version2/info/image/${name}.png`,
     itemImage: (name, itemType) => `http://localhost:9934/resources/Version2/thumb/${itemType}/${name}.png`,
@@ -39,28 +47,31 @@ const materialUnit = defineComponent({
   },
   setup(props) {
     const propsValue = unref(props);
+    const materialMap = inject("materialMap");
+
     const params = propsValue.data;
-    let ascensionName = "";
+    const de = params.ascension[0].split("的");
+    const zhi = params.ascension[0].split("之");
+    const arr = de.length === 1 ? zhi : de;
+    const ascensionName = arr[0] || "";
 
-    if (propsValue.type === "weapon") {
-      const de = params.ascension[0].split("的");
-      const zhi = params.ascension[0].split("之");
-      const arr = de.length === 1 ? zhi : de;
+    const getMaterialRarityBackground = (materialNameString) => {
+      const rarity = materialMap.items.find((material) => material.name === materialNameString)?.rarity;
+      const rarities = [undefined, "one-star", "two-star", "three-star", "four-star", "five-star"];
 
-      ascensionName = arr[0];
-    } else {
-      const regExp = new RegExp(/「(.*?)」/g);
-
-      ascensionName = regExp.exec(params.ascension[0])[0];
-    }
+      return rarity ? rarities[rarity] : "four-star";
+    };
 
     return {
       params,
       ascensionName,
       itemType: propsValue.type || "character",
+      materialMap,
+      getMaterialRarityBackground,
     };
   },
 });
+
 const materialColumnTemplate = html`<div class="material-column">
   <div class="title" v-html="title"></div>
   <materialUnit v-for="d in data" :data="d" :type="type" />
