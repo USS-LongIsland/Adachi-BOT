@@ -5,12 +5,7 @@ import "#utils/config";
 import db from "#utils/database";
 import { ls } from "#utils/file";
 
-const mDatabaseNames = ls(path.resolve(global.rootdir, "data", "db"))
-  .filter((c) => c.match(/\b\w+?[.]json$/))
-  .map((c) => {
-    const p = path.parse(c);
-    return p.name;
-  });
+("use strict");
 
 (async function main() {
   const { argv } = yargs(hideBin(process.argv))
@@ -72,9 +67,15 @@ const mDatabaseNames = ls(path.resolve(global.rootdir, "data", "db"))
         required: false,
       },
     });
+  const dbNames = ls(path.resolve(global.rootdir, "data", "db"))
+    .filter((c) => c.match(/\b\w+?[.]json$/))
+    .map((c) => {
+      const p = path.parse(c);
+      return p.name;
+    });
 
   if ("string" === typeof argv.key) {
-    if (!mDatabaseNames.includes(argv.database)) {
+    if (!dbNames.includes(argv.database)) {
       console.error(`错误：未知的数据库 ${argv.database} ，使用 -l 查看可用数据库。`);
       return -1;
     }
@@ -98,8 +99,8 @@ const mDatabaseNames = ls(path.resolve(global.rootdir, "data", "db"))
   }
 
   if (true === argv.list) {
-    if (mDatabaseNames.length > 0) {
-      console.log(mDatabaseNames.join("\n"));
+    if (dbNames.length > 0) {
+      console.log(dbNames.join("\n"));
       return 0;
     }
 

@@ -14,11 +14,11 @@ const template = html`<div class="container-overview-infos">
     <p class="info-title"><span>稀</span><span>有</span><span>度</span></p>
     <p class="info-content">{{ weaponInfo.rarity }}</p>
     <p class="info-title"><span>基</span><span>础</span><span>攻</span><span>击</span></p>
-    <p class="info-content baseATK">{{ weaponInfo.baseATK }}</p>
+    <p class="info-content baseATK">{{ parseInt(weaponInfo.baseATK) }}</p>
     <p class="info-title"><span>突</span><span>破</span><span>属</span><span>性</span></p>
     <p class="info-content weapon-ascension-prop">{{ weaponInfo.ascensionProp }}</p>
     <p class="info-title"><span>突</span><span>破</span><span>加</span><span>成</span></p>
-    <p class="info-content weapon-ascension-value">{{ weaponInfo.ascensionValue }}</p>
+    <p class="info-content weapon-ascension-value">{{ parseValue(weaponInfo.ascensionValue) }}</p>
   </div>
   <div class="container-introduction">
     <p class="introduction" v-html="getStructuredContent(weaponInfo.description)"></p>
@@ -72,7 +72,7 @@ export default defineComponent({
   },
   methods: {
     getMaterialUrl(material) {
-      return `http://localhost:9934/resources/Version2/info/image/${material}.png`;
+      return `http://localhost:9934/resources/material/icon/${material}.webp`;
     },
     getStructuredContent: (text) => `${text.replace(/\\n/g, "<br>")}`,
   },
@@ -84,7 +84,7 @@ export default defineComponent({
     const decoStripContent = "WEAPON INFORMATION - ".repeat(4);
     const weaponTitle = params.title + "・" || "";
     const weaponImageFilename = params.name + ".png";
-    const weaponImageUrl = `http://localhost:9934/resources/Version2/weapon/${weaponImageFilename}`;
+    const weaponImageUrl = `http://localhost:9934/resources/weapon/picture/${weaponImageFilename}`;
     const weaponInfo = {
       weaponFullName: weaponTitle + params.name,
       accessMethod: params["access"] || "暂无信息",
@@ -108,6 +108,14 @@ export default defineComponent({
       return rarity ? rarities[rarity] : "four-star";
     };
 
+    function parseValue(valueString) {
+      if (valueString.endsWith("%")) {
+        return parseFloat(valueString.replace(/%/g, "")).toFixed(1) + "%";
+      } else {
+        return parseInt(valueString);
+      }
+    }
+
     return {
       decoStripContent,
       weaponTitle,
@@ -115,6 +123,7 @@ export default defineComponent({
       weaponImageUrl,
       weaponInfo,
       getMaterialRarityBackground,
+      parseValue,
     };
   },
 });

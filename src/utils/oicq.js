@@ -7,19 +7,21 @@ import querystring from "querystring";
 import { genDmMessageId } from "oicq/lib/message/message.js";
 import { matchBracket } from "#utils/tools";
 
+("use strict");
+
 // lib/message/message.ts: escapeCQInside
-const mCQ = {
+const m_CQ = Object.freeze({
   "&#91;": "[",
   "&#93;": "]",
   "&amp;": "&",
-};
+});
 // lib/message/message.ts: escapeCQInside
-const mCQInside = {
+const m_CQ_INSIDE = Object.freeze({
   "&": "&amp;",
   ",": "&#44;",
   "[": "&#91;",
   "]": "&#93;",
-};
+});
 
 // lib/message/elements.ts: qs
 function qs(text, sep = ",", equal = "=") {
@@ -34,7 +36,7 @@ function qs(text, sep = ",", equal = "=") {
 
     ret[c.substring(0, i)] = c
       .substring(i + 1)
-      .replace(new RegExp(Object.values(mCQInside).join("|"), "g"), (s) => lodash.invert(mCQInside)[s] || "");
+      .replace(new RegExp(Object.values(m_CQ_INSIDE).join("|"), "g"), (s) => lodash.invert(m_CQ_INSIDE)[s] || "");
   });
 
   for (const k in ret) {
@@ -71,7 +73,7 @@ function toCqcode(msg = {}) {
 
     const s = querystring.stringify(c, ",", "=", {
       encodeURIComponent: (s) =>
-        s.replace(new RegExp(Object.keys(mCQInside).join("|"), "g"), (s) => mCQInside[s] || ""),
+        s.replace(new RegExp(Object.keys(m_CQ_INSIDE).join("|"), "g"), (s) => m_CQ_INSIDE[s] || ""),
     });
     const cq = `[CQ:${c.type}${s ? "," : ""}${s}]`;
 
@@ -119,7 +121,7 @@ function fromCqcode(text = "") {
   }
 
   for (const c of items) {
-    const s = c.replace(new RegExp(Object.keys(mCQ).join("|"), "g"), (s) => mCQ[s] || "");
+    const s = c.replace(new RegExp(Object.keys(m_CQ).join("|"), "g"), (s) => m_CQ[s] || "");
     let cq = c.replace("[CQ:", "type=");
 
     if ("string" === typeof s && "" !== s && !s.includes("[CQ:")) {
@@ -236,7 +238,7 @@ async function say(
         }
         case "private": {
           if (isFriend(bot, id)) {
-            bot.sendPrivateMsg(id, fromCqcode(msg));
+            await bot.sendPrivateMsg(id, fromCqcode(msg));
             return;
           }
 
@@ -252,7 +254,7 @@ async function say(
             throw `未找到陌生人 ${id} 所在的群组`;
           }
 
-          bot.sendTempMsg(gid, id, fromCqcode(msg));
+          await bot.sendTempMsg(gid, id, fromCqcode(msg));
           break;
         }
       }

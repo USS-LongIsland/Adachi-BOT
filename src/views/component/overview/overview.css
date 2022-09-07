@@ -47,31 +47,31 @@ body,
   width: 1100px;
 }
 
-.character-anemo {
+.character-风元素 {
   background: linear-gradient(#a5d6c7, #629988);
 }
 
-.character-cryo {
+.character-冰元素 {
   background: linear-gradient(#a3d2e6, #5c8e9c);
 }
 
-.character-dendro {
+.character-草元素 {
   background: linear-gradient(#b5cfa3, #7a855b);
 }
 
-.character-electro {
+.character-雷元素 {
   background: linear-gradient(#cfb0d6, #5b6282);
 }
 
-.character-geo {
+.character-岩元素 {
   background: linear-gradient(#e8d29b, #93666d);
 }
 
-.character-hydro {
+.character-水元素 {
   background: linear-gradient(#7eb6de, #5f6999);
 }
 
-.character-pyro {
+.character-火元素 {
   background: linear-gradient(#f2d09d, #a3615a);
 }
 
@@ -80,27 +80,27 @@ body,
 }
 
 .materials.five-star {
-  background: url("http://localhost:9934/resources/Version2/thumb/stars/5-Star.png") no-repeat center;
+  background: url("http://localhost:9934/resources/etc/image/5-Star.png") no-repeat center;
   background-size: 100%;
 }
 
 .materials.four-star {
-  background: url("http://localhost:9934/resources/Version2/thumb/stars/4-Star.png") no-repeat center;
+  background: url("http://localhost:9934/resources/etc/image/4-Star.png") no-repeat center;
   background-size: 100%;
 }
 
 .materials.three-star {
-  background: url("http://localhost:9934/resources/Version2/thumb/stars/3-Star.png") no-repeat center;
+  background: url("http://localhost:9934/resources/etc/image/3-Star.png") no-repeat center;
   background-size: 100%;
 }
 
 .materials.two-star {
-  background: url("http://localhost:9934/resources/Version2/thumb/stars/2-Star.png") no-repeat center;
+  background: url("http://localhost:9934/resources/etc/image/2-Star.png") no-repeat center;
   background-size: 100%;
 }
 
 .materials.one-star {
-  background: url("http://localhost:9934/resources/Version2/thumb/stars/1-Star.png") no-repeat center;
+  background: url("http://localhost:9934/resources/etc/image/1-Star.png") no-repeat center;
   background-size: 100%;
 }
 

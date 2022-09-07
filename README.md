@@ -16,6 +16,8 @@
 
 ### 开发
 
+> 运行命令 `npm run install-dev` 以安装开发者模块。
+
 1. 代码提交前运行 `npm run code-check` 进行检查确保无报错，并运行 `npm run code-format` 进行格式化。
 2. 代码自测完毕后发起 [Pull request](https://github.com/Arondight/Adachi-BOT/pulls) 合入 `dev` 分支。
 3. 新功能添加或者功能修改请先发起 [Issue](https://github.com/Arondight/Adachi-BOT/issues) 询问我的意愿，根据沟通结果选择合入本项目或者提交到你账户下的一个 Fork 。漏洞修复无需事先沟通，直接发起 [Pull request](https://github.com/Arondight/Adachi-BOT/pulls) 并描述清楚问题即可。
@@ -24,7 +26,7 @@
 >
 > 1. `Update JavaScript modules in dev branch`
 > 2. `Update Node.js modules in dev branch`
-> 3. `Update resources in dev branch`
+> 3. `Update material.json in dev branch`
 
 ## 使用
 
@@ -52,8 +54,7 @@ sudo --preserve-env=PATH env n lts
 #### 克隆项目
 
 ```sh
-git clone https://github.com/Arondight/Adachi-BOT.git
-cd ./Adachi-BOT/
+git clone --depth 1 https://github.com/Arondight/Adachi-BOT.git
 ```
 
 <details>
@@ -62,14 +63,14 @@ cd ./Adachi-BOT/
 如果你访问 GitHub 的速度很慢，那么请使用下面的命令克隆本项目的镜像。
 
 ```
-git clone https://gitcode.net/iSpeller/Adachi-BOT.git
+git clone --depth 1 https://gitcode.net/iSpeller/Adachi-BOT.git
 ```
 
 </details>
 
 #### 安装依赖模块
 
-你需要使用 `npm` 命令安装所需的依赖模块，但是因为 [Puppeteer](https://github.com/puppeteer/puppeteer.git) 在安装过程中具有特殊性，所以整个安装过程有了两种思路，你可以在下面的安装方法中任选其一。
+你需要使用 `npm` 命令安装所需的依赖模块，但是因为 [Puppeteer](https://github.com/puppeteer/puppeteer.git) 在安装过程中具有特殊性，所以整个安装过程有了两种思路，进入本项目所在的目录 `./Adachi-BOT/` 后，你可以在下面的安装方法中任选其一。
 
 ##### 其一，（推荐）使用系统自带的 Chromium
 
@@ -99,7 +100,7 @@ echo 'export PUPPETEER_EXECUTABLE_PATH="/usr/lib64/chromium-browser/chromium-bro
 echo 'export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"' | tee -a ~/.bashrc
 source ~/.bashrc
 
-npm install
+npm run install-prod
 ```
 
 > 1. 其中 `/usr/lib64/chromium-browser/chromium-browser` 是你的 Chromium 浏览器 ELF 文件路径，而**非启动脚本或其链接**的路径，具体请参照 [FAQ](https://github.com/Arondight/Adachi-BOT/issues?q=label%3Adocumentation) 中的[《Linux 下如何找到 Chromium 的二进制 ELF 文件路径》](https://github.com/Arondight/Adachi-BOT/issues/465)。
@@ -110,20 +111,20 @@ npm install
 这需要你的系统有访问国际互联网的能力，如果可以访问，直接执行以下命令。
 
 ```sh
-npm install
+npm run install-prod
 ```
 
 如果无法访问，那么你需要通过任意合法途径获得一个可以访问国际互联网的 `http` 代理，然后执行以下命令。
 
 ```sh
-npm_config_proxy=http://<代理地址>:<代理端口> npm install
+npm_config_proxy=http://<代理地址>:<代理端口> npm run install-prod
 ```
 
 > 注意使用此方法安装 Chromium ，你需要自行解决它的运行依赖问题（例如缺少动态库）。
 
 ### 配置
 
-首次配置，进入本项目所在的目录 `./Adachi-BOT/`，执行以下命令从 `./config_defaults/` 下复制默认配置文件 `setting.yml` 和 `cookies.yml` 到 `./config/` 中。
+首次配置，进入本项目所在的目录 `./Adachi-BOT/` ，执行以下命令从 `./config_defaults/` 下复制默认配置文件 `setting.yml` 和 `cookies.yml` 到 `./config/` 中。
 
 ```sh
 cp -iv ./config_defaults/{setting,cookies}.yml ./config/
@@ -171,8 +172,7 @@ cp -iv ./config_defaults/{setting,cookies}.yml ./config/
 #### 进行更新
 
 ```sh
-git pull -p
-npm install
+npm run update
 ```
 
 #### 查看配置文件变更
