@@ -19,6 +19,7 @@ const m_DIR = Object.freeze({
 });
 const m_NICK_AMBR_TO_HONEY = Object.freeze({
   amber: "ambor",
+  alhaitham: "alhatham",
   heizou: "heizo",
   jean: "qin",
   kujousara: "sara",
@@ -50,6 +51,12 @@ const m_DAY_OF_WEEK_CN = Object.freeze({
 const m_UNKNOWN = Object.freeze("未知");
 const m_YE = Object.freeze("旅行者");
 const m_YE_EN = Object.freeze("Traveler");
+const m_KONG = Object.freeze("空");
+const m_KONG_EN = Object.freeze("Aether");
+const m_YING = Object.freeze("荧");
+const m_YING_EN = Object.freeze("Lumine");
+const m_ID_KONG = 10000005;
+const m_ID_YING = 10000007;
 const m_CAO = Object.freeze("草元素");
 const m_CAO_EN = Object.freeze("Grass");
 const m_AMBR_TOP = Object.freeze("https://api.ambr.top");
@@ -87,6 +94,30 @@ const mData = {
     info: [],
   },
 };
+
+function isYe(name) {
+  return [m_YE, m_KONG, m_KONG_EN, m_YING, m_YING_EN].includes(name);
+}
+
+/***
+ * @param {string} id - id text from ambr.top API.
+ * @param {string} lang - "zh" or "en".
+ */
+function nameOfYe(id, lang = "zh") {
+  const langId = Object.freeze(["zh", "en"]).indexOf(lang) || 0;
+  const names = Object.freeze({
+    [m_ID_KONG]: [m_KONG, m_KONG_EN],
+    [m_ID_YING]: [m_YING, m_YING_EN],
+  });
+
+  id = String(id).match(/\d+/)[0];
+
+  for (const [i, n] of Object.entries(names)) {
+    if (i === id) {
+      return n[langId];
+    }
+  }
+}
 
 async function imgToWebpFile(
   buffer,
@@ -239,7 +270,12 @@ async function getData() {
         item.type = data.types[item.weaponType];
         item.icon = item.icon.match(/(?<=UI_AvatarIcon_)\w+/)[0];
 
-        if (!(m_YE === item.name && m_CAO !== item.element)) {
+        // 这里分荧妹和龙哥
+        if (m_YE === item.name) {
+          item.name = nameOfYe(item.id);
+        }
+
+        if (!(isYe(item.name) && m_CAO !== item.element)) {
           parsed.push(lodash.pick(item, ["birthday", "element", "icon", "id", "name", "rarity", "type"]));
         }
       }
@@ -252,7 +288,12 @@ async function getData() {
 
     for (const item of Object.values(data.items)) {
       if (Object.keys(data.types).includes(item.weaponType)) {
-        if (!(m_YE_EN === item.name && m_CAO_EN !== item.element)) {
+        // 这里分荧妹和龙哥
+        if (m_YE_EN === item.name) {
+          item.name = nameOfYe(item.id, "en");
+        }
+
+        if (!(isYe(item.name) && m_CAO_EN !== item.element)) {
           parsed.push(lodash.pick(item, ["id", "name"]));
         }
       }
@@ -340,9 +381,9 @@ async function parseCharInfo(name) {
       levelUpMaterials: [],
       mainStat: "",
       mainValue: "",
-      name: data.name,
-      passiveDesc: tagColorToSpan(m_YE !== data.name ? data.talent[6].description : ""),
-      passiveTitle: m_YE !== data.name ? data.talent[6].name : "",
+      name: isYe(data.name) ? nameOfYe(data.id) : data.name,
+      passiveDesc: tagColorToSpan(isYe(data.name) ? "" : data.talent[6].description),
+      passiveTitle: isYe(data.name) ? "" : data.talent[6].name,
       rarity: data.rank,
       talentMaterials: [],
       time: "",
@@ -428,22 +469,21 @@ async function parseCharInfo(name) {
     }
 
     // info.talentMaterials
-    const talentMaterialsIdx =
-      m_YE === data.name
-        ? [
-            // [number, rarity]
-            [3, 2],
-            [6, 3],
-            [6, 4],
-            [6, 5],
-          ]
-        : [
-            // [number, rarity]
-            [3, 2],
-            [21, 3],
-            [38, 4],
-            [6, 5],
-          ];
+    const talentMaterialsIdx = isYe(data.name)
+      ? [
+          // [number, rarity]
+          [3, 2],
+          [6, 3],
+          [6, 4],
+          [6, 5],
+        ]
+      : [
+          // [number, rarity]
+          [3, 2],
+          [21, 3],
+          [38, 4],
+          [6, 5],
+        ];
 
     for (let i = 0; i < talentMaterialsIdx.length; ++i) {
       for (const [id, num] of Object.entries(ascension.talent)) {
@@ -741,7 +781,7 @@ async function getMaterialImg(name) {
   }
 }
 
-async function getGachaImg(url, file, isChar = true, size = [320, 1024], position = webpPos.BOTTOM) {
+async function getGachaImg(url, file, lossless = true, isChar = true, size = [320, 1024], position = webpPos.BOTTOM) {
   function resize(from = [0, 0], to = [0, 0]) {
     const [width, height] = from;
     const [widthTo, heightTo] = to;
@@ -758,7 +798,7 @@ async function getGachaImg(url, file, isChar = true, size = [320, 1024], positio
         x = width * ys;
       }
 
-      return [x, y];
+      return [Math.floor(x), Math.floor(y)];
     }
 
     return to;
@@ -769,20 +809,32 @@ async function getGachaImg(url, file, isChar = true, size = [320, 1024], positio
   const [widthTo, heightTo] = size;
   const [x, y] = resize([width, height], [widthTo, heightTo]);
 
-  if (true === isChar && (width > widthTo || height > heightTo)) {
-    gachaImg = await toWebp(
-      gachaImg,
-      true,
-      { resize: webpOpt.RESIZE, size: x },
-      { resize: webpOpt.RESIZE, size: y },
-      webpPos.CENTER
-    );
+  if (true === isChar) {
+    if (width > widthTo || height > heightTo) {
+      gachaImg = await toWebp(
+        gachaImg,
+        true,
+        { resize: webpOpt.RESIZE, size: x },
+        { resize: webpOpt.RESIZE, size: y },
+        webpPos.CENTER
+      );
+    }
+  } else {
+    if (width !== widthTo || height !== heightTo) {
+      gachaImg = await toWebp(
+        gachaImg,
+        true,
+        { resize: webpOpt.CROP, size: widthTo },
+        { resize: webpOpt.CROP, size: heightTo },
+        webpPos.CENTER
+      );
+    }
   }
 
   await imgToWebpFile(
     gachaImg,
     file,
-    !isChar, // XXX change this if weapon doesn't from www.projectcelestia.com
+    lossless,
     { resize: webpOpt.CROP, size: widthTo },
     { resize: webpOpt.CROP, size: heightTo },
     position
@@ -851,7 +903,7 @@ async function getCharRes(info) {
   if (!fs.existsSync(file)) {
     const gachaId = String(info.id).slice(-3);
 
-    await getGachaImg(`${m_HONEY_HUNTER_WORLD_COM}/img/${nameEn}_${gachaId}_gacha_card.webp`, file);
+    await getGachaImg(`${m_HONEY_HUNTER_WORLD_COM}/img/${nameEn}_${gachaId}_gacha_card.webp`, file, false);
   }
 }
 
@@ -886,13 +938,27 @@ async function getWeaponRes(info) {
   file = path.resolve(gachadir, `${item.name}.webp`);
 
   if (!fs.existsSync(file)) {
-    await getGachaImg(
+    const urls = [
       `${m_PROJECT_CELESTIA_COM}/static/images/UI_Gacha_EquipIcon_${item.icon}.webp`,
-      file,
-      false,
-      [320, 1024],
-      webpPos.CENTER
-    );
+      `${m_HONEY_HUNTER_WORLD_COM}/img/i_n${item.id}_gacha_icon.webp`,
+      `${m_HONEY_HUNTER_WORLD_COM}/img/i_n${item.id}.webp`,
+    ];
+    const losslessIdx = 1;
+    let ok = false;
+
+    for (let i = 0; i < urls.length; ++i) {
+      try {
+        await getGachaImg(urls[i], file, i >= losslessIdx, false, [320, 1024], webpPos.CENTER);
+        ok = true;
+        break;
+      } catch (e) {
+        // do nothing
+      }
+    }
+
+    if (!ok) {
+      throw Error(`Failed to get gacha image.`);
+    }
   }
 }
 

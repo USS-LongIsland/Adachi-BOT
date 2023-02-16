@@ -16,18 +16,41 @@
     "冒险道具",
     "消耗品",
     "小道具",
+    "系统开放",
+    "好感成长",
     "稀有货币",
     "通用货币",
-    "挑战结算道具",
     "高级兑换券",
     "普通兑换券",
     "限定祈愿道具",
     "祈愿道具",
     "七国徽印",
     "角色经验素材",
-    "武器强化素材"
+    "武器强化素材",
+    "挑战结算道具"
   ],
   "items": [
+    {
+      "id": 102,
+      "name": "冒险阅历",
+      "type": "系统开放",
+      "rarity": 3,
+      "beta": false
+    },
+    {
+      "id": 105,
+      "name": "好感经验",
+      "type": "好感成长",
+      "rarity": 3,
+      "beta": false
+    },
+    {
+      "id": 106,
+      "name": "原粹树脂",
+      "type": "挑战结算道具",
+      "rarity": 3,
+      "beta": false
+    },
     {
       "id": 201,
       "name": "原石",
@@ -53,20 +76,6 @@
       "id": 204,
       "name": "洞天宝钱",
       "type": "稀有货币",
-      "rarity": 3,
-      "beta": false
-    },
-    {
-      "id": 210,
-      "name": "原粹精珀（废弃）",
-      "type": "挑战结算道具",
-      "rarity": 2,
-      "beta": false
-    },
-    {
-      "id": 211,
-      "name": "原粹树脂（废弃）",
-      "type": "挑战结算道具",
       "rarity": 3,
       "beta": false
     },
@@ -554,6 +563,20 @@
       "beta": false
     },
     {
+      "id": 100097,
+      "name": "神秘的肉",
+      "type": "食材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 100098,
+      "name": "咖啡豆",
+      "type": "食材",
+      "rarity": 1,
+      "beta": true
+    },
+    {
       "id": 100584,
       "name": "深邃之血",
       "type": "任务道具",
@@ -628,6 +651,76 @@
       "name": "紫晶块",
       "type": "锻造用矿石",
       "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101101,
+      "name": "北陆单手剑原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101102,
+      "name": "北陆弓原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101103,
+      "name": "北陆双手剑原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101104,
+      "name": "北陆法器原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101105,
+      "name": "北陆长柄武器原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101111,
+      "name": "央陆单手剑原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101112,
+      "name": "央陆弓原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101113,
+      "name": "央陆双手剑原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101114,
+      "name": "央陆法器原胚",
+      "type": "素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
+      "id": 101115,
+      "name": "央陆长柄武器原胚",
+      "type": "素材",
+      "rarity": 4,
       "beta": false
     },
     {
@@ -771,6 +864,13 @@
       "beta": false
     },
     {
+      "id": 101222,
+      "name": "沙脂蛹",
+      "type": "须弥区域特产",
+      "rarity": 1,
+      "beta": false
+    },
+    {
       "id": 101225,
       "name": "圣金虫",
       "type": "须弥区域特产",
@@ -785,19 +885,165 @@
       "beta": false
     },
     {
+      "id": 101301,
+      "name": "桦木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101302,
+      "name": "萃华木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101303,
+      "name": "松木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101304,
+      "name": "却砂木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101305,
+      "name": "竹节",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101307,
+      "name": "垂香木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101308,
+      "name": "杉木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101309,
+      "name": "梦见木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101310,
+      "name": "枫木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101311,
+      "name": "孔雀木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101312,
+      "name": "御伽木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101313,
+      "name": "辉木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101314,
+      "name": "业果木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101315,
+      "name": "证悟木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101316,
+      "name": "刺葵木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101317,
+      "name": "柽木",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101401,
+      "name": "布匹",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101402,
+      "name": "红色染料",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101403,
+      "name": "黄色染料",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 101404,
+      "name": "蓝色染料",
+      "type": "素材",
+      "rarity": 1,
+      "beta": false
+    },
+    {
       "id": 104001,
       "name": "流浪者的经验",
-      "type": "characterEXPMaterial"
+      "type": "角色经验素材",
+      "rarity": 2,
+      "beta": false
     },
     {
       "id": 104002,
       "name": "冒险家的经验",
-      "type": "characterEXPMaterial"
+      "type": "角色经验素材",
+      "rarity": 3,
+      "beta": false
     },
     {
       "id": 104003,
       "name": "大英雄的经验",
-      "type": "characterEXPMaterial"
+      "type": "角色经验素材",
+      "rarity": 4,
+      "beta": false
     },
     {
       "id": 104011,
@@ -1325,6 +1571,13 @@
       "beta": false
     },
     {
+      "id": 107009,
+      "name": "脆弱树脂",
+      "type": "消耗品",
+      "rarity": 4,
+      "beta": false
+    },
+    {
       "id": 107010,
       "name": "绯红玉髓",
       "type": "冒险道具",
@@ -1332,8 +1585,22 @@
       "beta": false
     },
     {
+      "id": 107012,
+      "name": "须臾树脂",
+      "type": "消耗品",
+      "rarity": 4,
+      "beta": false
+    },
+    {
       "id": 107014,
       "name": "散失的雷神瞳",
+      "type": "冒险道具",
+      "rarity": 1,
+      "beta": false
+    },
+    {
+      "id": 107017,
+      "name": "散失的草神瞳",
       "type": "冒险道具",
       "rarity": 1,
       "beta": false
@@ -2018,6 +2285,27 @@
       "beta": false
     },
     {
+      "id": 112074,
+      "name": "残毁的横脊",
+      "type": "角色培养素材",
+      "rarity": 2,
+      "beta": false
+    },
+    {
+      "id": 112075,
+      "name": "密固的横脊",
+      "type": "角色培养素材",
+      "rarity": 3,
+      "beta": false
+    },
+    {
+      "id": 112076,
+      "name": "锲纹的横脊",
+      "type": "角色培养素材",
+      "rarity": 4,
+      "beta": false
+    },
+    {
       "id": 113001,
       "name": "飓风之种",
       "type": "角色培养素材",
@@ -2288,21 +2576,35 @@
       "name": "灭诤草蔓",
       "type": "角色培养素材",
       "rarity": 4,
-      "beta": true
+      "beta": false
     },
     {
       "id": 113041,
-      "name": "？？？",
+      "name": "傀儡的悬丝",
       "type": "角色培养素材",
       "rarity": 5,
-      "beta": true
+      "beta": false
     },
     {
       "id": 113042,
-      "name": "？？？",
+      "name": "无心的渊镜",
       "type": "角色培养素材",
       "rarity": 5,
-      "beta": true
+      "beta": false
+    },
+    {
+      "id": 113043,
+      "name": "空行的虚铃",
+      "type": "角色培养素材",
+      "rarity": 5,
+      "beta": false
+    },
+    {
+      "id": 113044,
+      "name": "苍砾蕊羽",
+      "type": "角色培养素材",
+      "rarity": 4,
+      "beta": false
     },
     {
       "id": 114001,
@@ -2648,6 +2950,13 @@
       "beta": false
     },
     {
+      "id": 120127,
+      "name": "初生白枝",
+      "type": "任务道具",
+      "rarity": 5,
+      "beta": false
+    },
+    {
       "id": 220001,
       "name": "风神瞳共鸣石",
       "type": "消耗品",
@@ -2900,6 +3209,13 @@
       "beta": false
     },
     {
+      "id": 220056,
+      "name": "秘典之盒",
+      "type": "小道具",
+      "rarity": 4,
+      "beta": false
+    },
+    {
       "id": 220057,
       "name": "草神瞳共鸣石",
       "type": "消耗品",
@@ -2963,11 +3279,25 @@
       "beta": false
     },
     {
+      "id": 220072,
+      "name": "魔瓶镇灵·利露帕尔",
+      "type": "小道具",
+      "rarity": 4,
+      "beta": false
+    },
+    {
       "id": 220074,
       "name": "缥锦机关·留云",
       "type": "小道具",
       "rarity": 4,
       "beta": false
+    },
+    {
+      "id": 220078,
+      "name": "绮筵之鼓",
+      "type": "小道具",
+      "rarity": 4,
+      "beta": true
     }
   ]
 }

@@ -218,6 +218,7 @@
  *   prefixes: [ null ],
  *   atMe: 1,
  *   atUser: 1,
+ *   checkMasterAuth: 0,
  *   replyStranger: 1,
  *   repeatProb: 1,
  *   groupHello: 1,
@@ -248,6 +249,7 @@
  *   - 987654321
  * atMe: 1
  * atUser: 1
+ * checkMasterAuth: 0,
  * replyStranger: 1
  * repeatProb: 1
  * groupHello: 1
@@ -813,7 +815,7 @@ function readAuthority() {
     // 消息响应
     reply_auth: "off",
   };
-  const defaultAuth = Object.assign({}, defaultConfig, m_AUTHORITY.default || {});
+  const defaultAuth = { ...defaultConfig, ...(m_AUTHORITY.default || {}) };
 
   // 转换为 boolean
   Object.keys(defaultAuth).forEach((k) => {
@@ -842,6 +844,8 @@ function readSetting() {
     atMe: 0,
     // 群聊回复时不 @ 用户
     atUser: 0,
+    // 不检查管理员的权限
+    checkMasterAuth: 0,
     // 不回复陌生人消息
     replyStranger: 0,
     // 不复读群消息
@@ -891,6 +895,7 @@ function readSetting() {
   const prefixes = m_SETTING.prefixes;
   const atMe = parseInt(m_SETTING.atMe);
   const atUser = parseInt(m_SETTING.atUser);
+  const checkMasterAuth = parseInt(m_SETTING.checkMasterAuth);
   const replyStranger = parseInt(m_SETTING.replyStranger);
   const repeatProb = parseInt(parseFloat(m_SETTING.repeatProb) * 100);
   const groupHello = parseInt(m_SETTING.groupHello);
@@ -931,6 +936,7 @@ function readSetting() {
     },
     { atMe },
     { atUser },
+    { checkMasterAuth },
     { replyStranger },
     { repeatProb },
     { groupHello },
@@ -1048,8 +1054,12 @@ function readProphecy() {
 // global.names.allAlias        ->  name (lowercase): alias (string, lowercase)
 function readNames() {
   function getSection(s) {
+    function getExtra(o) {
+      return lodash.merge(...o.map((c) => ({ [c.name]: [] })));
+    }
+
     return lodash.reduce(
-      m_NAMES[s] || {},
+      { ...getExtra(global.info[s]), ...(m_NAMES[s] || {}) },
       (p, v, k) => {
         (v || (v = [])).push(k);
         v.forEach((c) => (p["string" === typeof c ? c.toLowerCase() : c] = k));
@@ -1065,7 +1075,7 @@ function readNames() {
 
   global.names.characterAlias = getSection("character");
   global.names.weaponAlias = getSection("weapon");
-  global.names.allAlias = Object.assign({}, global.names.characterAlias, global.names.weaponAlias);
+  global.names.allAlias = { ...global.names.characterAlias, ...global.names.weaponAlias };
   global.names.character = getNames(global.names.characterAlias);
   global.names.weapon = getNames(global.names.weaponAlias);
   global.names.all = getNames(global.names.allAlias);
@@ -1163,12 +1173,11 @@ function readArtifacts() {
 // global.info.weapon       -> array of { access, ascensionMaterials, baseATK, introduce, mainStat, mainValue, name,
 //                                        rarity, skillContent, skillName, time, title, type }, sorted by rarity
 function readInfo() {
-  const names = Object.values(global.names.allAlias);
   const dir = path.resolve(global.rootdir, "resources", "info", "doc");
   const info = ls(dir)
     .filter((c) => {
       const p = path.parse(c);
-      return ".json" === p.ext && names.includes(p.name);
+      return ".json" === p.ext;
     })
     .map((c) => {
       const p = path.parse(c);
@@ -1306,9 +1315,9 @@ function getAll() {
   }
 
   global.all.functions = {};
-  global.all.functions.options = Object.assign({}, global.command.functions.options, global.master.functions.options);
-  global.all.functions.revert = Object.assign({}, global.command.functions.revert, global.master.functions.revert);
-  global.all.functions.type = Object.assign({}, global.command.functions.type, global.master.functions.type);
+  global.all.functions.options = { ...global.command.functions.options, ...global.master.functions.options };
+  global.all.functions.revert = { ...global.command.functions.revert, ...global.master.functions.revert };
+  global.all.functions.type = { ...global.command.functions.type, ...global.master.functions.type };
   merge(global.all, "function", global.command.function, global.master.function);
   merge(global.all.functions, "entrance", global.command.functions.entrance, global.master.functions.entrance);
 }
@@ -1328,9 +1337,9 @@ function readConfig() {
   readGreeting();
   readMenu();
   readProphecy();
-  readNames();
   readArtifacts();
   readInfo();
+  readNames();
   readEggs();
   readQa();
   readMaterial();

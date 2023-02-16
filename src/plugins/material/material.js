@@ -7,19 +7,22 @@ import { getWordByRegex } from "#utils/tools";
 
 ("use strict");
 
-// 如果注释中的链接失效，尝试在米游社中搜索用户“好多梨”。
-// 周本图，包括天赋、武器、世界BOSS
+// 观测枢最底部“索引分类”中“WIKI索引”，点击“角色天赋材料周常表”和“武器突破材料周常表”
+// https://bbs.mihoyo.com/ys/strategy/
 const m_URL = Object.freeze({
+  // 角色天赋
   // https://bbs.mihoyo.com/ys/obc/content/1226/detail
-  talent: getUrl("/2022/09/28/75833613/7dd84fc0c362454388657aa4500072a4_5765589602624912314.png"),
+  talent: getUrl("/2022/11/02/75833613/33abe74e7d9a726317c8e35f1ea16d6b_5405833439823368117.png"),
+  // 武器素材
   // https://bbs.mihoyo.com/ys/obc/content/1187/detail
-  weapon: getUrl("/2022/09/28/75833613/43a36f7300eeb17767fd8e708cedd708_6341294669712434358.png"),
+  weapon: getUrl("/2022/11/02/75833613/bdb0f92e4a5ba578c19db1dc04dc24d2_1956175768159653123.png"),
+  // 周本掉落
   // https://bbs.mihoyo.com/ys/obc/content/1226/detail
-  weekly: getUrl("/2022/09/28/75833613/2b51fe5722a73b14891224d7b57d86fa_7881678352326384999.png"),
+  weekly: getUrl("/2022/11/02/75833613/54ce710a06f4b6adf2a7543beb020b75_7892771804697073162.png"),
 });
 
 function getUrl(p) {
-  return `https://uploadstatic.mihoyo.com/upload/${"/" === p[0] ? p.substring(1) : p}`;
+  return `https://uploadstatic.mihoyo.com/ys-obc/${"/" === p[0] ? p.substring(1) : p}`;
 }
 
 async function doMaterial(msg, url) {
@@ -46,7 +49,9 @@ async function doMaterial(msg, url) {
   const character = { type: "character", data: [] };
   const weapon = { type: "weapon", data: [] };
   const items = {
-    character: global.info.character.filter((c) => (global.material[materialList[dayOfWeek]] || []).includes(c.name)),
+    character: global.info.character.filter((c) =>
+      (("旅行者" !== c.name && global.material[materialList[dayOfWeek]]) || []).includes(c.name)
+    ),
     weapon: global.info.weapon.filter((c) => (global.material[materialList[dayOfWeek]] || []).includes(c.name)),
   };
   const ascensions = { character: [], weapon: [] };

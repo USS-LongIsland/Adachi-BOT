@@ -1,6 +1,7 @@
 import { exec } from "child_process";
 import lodash from "lodash";
 import os from "os";
+import { platform } from "process";
 import { checkAuth } from "#utils/auth";
 import { absPath, base64 } from "#utils/file";
 import { isGroupBan, toCqcode } from "#utils/oicq";
@@ -15,17 +16,32 @@ const mTimestamp = {};
 
 async function doPossibleCommand(msg, plugins, type, bot) {
   async function doQa(msg) {
-    if (false === checkAuth(msg, global.innerAuthName.qa, false)) {
+    if (!checkAuth(msg, global.innerAuthName.qa, false)) {
       return;
     }
 
     for (const [regex, option] of Object.entries(global.qa)) {
-      const r = new RegExp(regex, true === option.ignoreCase ? "i" : undefined);
+      let flag = "m";
+
+      if (true === option.ignoreCase) {
+        flag = `${flag}i`;
+      }
+
+      const r = new RegExp(regex, flag);
       const id = "group" === type ? msg.gid : msg.uid;
 
       if (r.test(msg.raw_message)) {
         if (true === option.master && !global.config.masters.includes(msg.user_id)) {
           bot.say(msg.sid, "此问答功能仅供管理者使用。", type, msg.uid);
+          break;
+        }
+
+        const osMatch =
+          undefined === option.platform ||
+          null === option.platform ||
+          (Array.isArray(option.platform) && option.platform.includes(platform));
+
+        if (false === osMatch) {
           break;
         }
 
@@ -70,7 +86,7 @@ async function doPossibleCommand(msg, plugins, type, bot) {
     const enableList = { ...global.command.enable, ...global.master.enable };
 
     for (const regex in regexPool) {
-      const r = new RegExp(regex, "i");
+      const r = new RegExp(regex, "mi");
       const plugin = regexPool[regex];
 
       if (enableList[plugin] && r.test(msg.raw_message)) {
@@ -108,7 +124,7 @@ async function doPossibleCommand(msg, plugins, type, bot) {
 
   // 处理 @ 机器人
   // [CQ:at,type=at,qq=123456789,text=@昵称]
-  const atMeReg = new RegExp(`^\\s*\\[CQ:at,type=.*?,qq=${bot.uin},text=.+?]\\s*`);
+  const atMeReg = new RegExp(`^\\s*\\[CQ:at,type=.*?,qq=${bot.uin},text=.+?]\\s*`, "m");
   const atMe = !!lodash.chain(msg.message).filter({ type: "at" }).find({ qq: bot.uin }).value();
 
   if (atMe) {
@@ -166,7 +182,7 @@ async function doPossibleCommand(msg, plugins, type, bot) {
   msg.groupOfStranger = groupOfStranger;
 
   // 不响应消息则当做一条已经指派插件的命令返回
-  if (false === checkAuth(msg, global.innerAuthName.reply, false)) {
+  if (!checkAuth(msg, global.innerAuthName.reply, false)) {
     return true;
   }
 
